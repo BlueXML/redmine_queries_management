@@ -1,0 +1,71 @@
+<!--#Copyright (C) 2017  Alexandre BOUDINE
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
+
+<% if !@query.new_record? #if a query is selected%>
+	<% if User.current.allowed_to?(:manage_public_query_wrappers, nil, :global => true) || @query.visibility == 0 #Is user allowed to change the directory of a public query of if actual query is private%>
+
+    	<% @wrappers_array_tmp = QueryWrapper.all.order("#{QueryWrapper.table_name}.title ASC").where(@project.nil? ? ["project_id IS NULL"] : ["project_id IS NULL OR project_id = ?", @project.id]).to_a #Get all directory%>
+
+    	<% if @query.visibility == 0 #If private, keep all privates ones%>
+      		<% @wrappers_array = @wrappers_array_tmp.select{|tmp| (tmp[:user_id] == User.current.id)} %>
+      		<% @wrappers_array = @wrappers_array.select{|tmp| (tmp[:visibility] == false)} %>
+    	<% else #If public, keep all public ones%>
+      		<% @wrappers_array = @wrappers_array_tmp.select{|tmp| (tmp[:visibility] == true)} %>
+    	<% end %>
+
+    	<% if @wrappers_array.nil? %>
+			<% @wrappers_array = [] %>
+		<% end %>
+
+    	<% @wrappers_array = @wrappers_array.map{|w| [w.title, w.id]} %>
+    	<% @wrappers_array.unshift(['',-1]) #add an empty slot and build a select list with those directories with ID as value%>
+    	<%= select_tag(:parent_wrap, options_for_select(@wrappers_array), {:onChange => "javascript: assign_parent(this);", :style => "margin-left:10px;"}) %>
+	<% end %>  
+<% end %>
+
+<script>
+	function assign_parent(item){
+		//On clic, assign the selected element in the list as parent directory for the current query
+		var e = document.getElementById("parent_wrap");
+		var id = item.options[item.selectedIndex].value;
+		$.ajax({
+			url: "/query_wrapper_query",
+			type: "POST",
+			data: {
+				wrapper_id: id,
+				query_id: <%= @query.id %>
+			},
+			success: function(html){location.reload();}
+		});
+	}
+
+	<% @qwq_tmp = QueryWrapperQuery.find_by_query_id(@query.id) %>
+	<% if @qwq_tmp != nil #If current query is in a directory, set that directory as selected by default in the list%>
+		$('#parent_wrap option[value=<%= @qwq_tmp.query_wrapper_id %>]').attr('selected','selected');
+	<% end %>
+
+	$('.buttons').append($('#parent_wrap'));
+
+
+
+
+</script>
+
+
+
+
+
+
+

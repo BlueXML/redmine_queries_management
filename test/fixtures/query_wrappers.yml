@@ -1,0 +1,27 @@
+public_global_query_wrapper:
+  id: 1
+  project_id: NULL
+  title: "Public Global Wrapper"
+  visibility: true
+  user_id: 3
+
+public_project_query_wrapper:
+  id: 2
+  project_id: 1
+  title: "Public Global Wrapper"
+  visibility: true
+  user_id: 3
+
+private_global_query_wrapper:
+  id: 3
+  project_id: NULL
+  title: "Public Global Wrapper"
+  visibility: false
+  user_id: 3
+
+private_project_query_wrapper:
+  id: 4
+  project_id: 1
+  title: "Public Global Wrapper"
+  visibility: false
+  user_id: 3

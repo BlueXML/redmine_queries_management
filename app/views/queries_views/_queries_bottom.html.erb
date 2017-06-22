@@ -1,0 +1,39 @@
+<!--#Copyright (C) 2017  Alexandre BOUDINE
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
+
+<% #Those are forms to create public/private directories  %>
+<% @sidebar_queries = IssueQuery.visible.order("#{Query.table_name}.name ASC").where(@project.nil? ? ["project_id IS NULL"] : ["project_id IS NULL OR project_id = ?", @project.id]).to_a #Used to check if there is queries already created, if not, don't display the creating form, because there is nowhere to display it%>
+
+<% if User.current.allowed_to?(:manage_public_query_wrappers, nil, :global => true) && !@sidebar_queries.reject(&:is_private?).empty? %>
+	<%= form_tag({:controller => 'query_wrapper', :action => 'create', :visibility => true, :project_id => (@project != nil ? @project.id : nil)}, :id => "add_public_query_wrapper") do %>
+		<%= text_field nil, :title, :placeholder => l(:title_placeholder) %>
+		<%= submit_tag l(:save_button) ,:onclick => "$('.a_wrap_true').toggle();$('.div_wrap_true').toggle();"%>
+		<%= link_to l(:cancel_button), {}, :onclick => "$('.a_wrap_true').toggle();$('.div_wrap_true').toggle();return false;" %>
+	<% end %>
+<% end %>
+
+<% if User.current.logged? && !@sidebar_queries.select(&:is_private?).empty? %>
+	<%= form_tag({:controller => 'query_wrapper', :action => 'create', :visibility => false, :project_id => (@project != nil ? @project.id : nil)}, :id => "add_private_query_wrapper") do %>
+		<%= text_field nil, :title, :placeholder => l(:title_placeholder) %>
+		<%= submit_tag l(:save_button) ,:onclick => "$('.a_wrap_false').toggle();$('.div_wrap_false').toggle();"%>
+		<%= link_to l(:cancel_button), {}, :onclick => "$('.a_wrap_false').toggle();$('.div_wrap_false').toggle();return false;" %>
+	<% end %>
+<% end %>
+
+<script type="text/javascript">
+    $('.div_wrap_true').append($('#add_public_query_wrapper'));
+    $('.div_wrap_false').append($('#add_private_query_wrapper'));
+</script>
+

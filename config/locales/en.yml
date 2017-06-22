@@ -1,0 +1,9 @@
+# English strings go here for Rails i18n
+en:
+  error_name_flag: Enter valid name.
+  save_button: Save
+  cancel_button: Cancel
+  title_placeholder: Title
+  add_wrapper_link: Add directory
+  permission_manage_public_query_wrappers: Manage public query directories
+  confirmation: Are you sure ?
