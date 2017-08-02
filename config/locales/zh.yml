@@ -1,0 +1,9 @@
+# Simplified Chinese strings go here for Rails i18n
+zh:
+  error_name_flag: 请输入有效的名称！
+  save_button: 保存
+  cancel_button: 取消
+  title_placeholder: 标题
+  add_wrapper_link: 添加目录
+  permission_manage_public_query_wrappers: 管理公共查询目录
+  confirmation: 您确定？
