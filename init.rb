@@ -17,8 +17,9 @@ require 'redmine'
 require_dependency 'queries_hooks/hook' #Apply views modifications
 
 Rails.configuration.to_prepare do
-	require_dependency 'issues_helper_patch' #Applu patch
-	IssuesHelper.send(:include, IssuesHelperPatch)
+  unless QueriesHelper.included_modules.include?(QueriesHelperPatch)
+    QueriesHelper.send :include, QueriesHelperPatch
+  end
 end
 
 Redmine::Plugin.register :redmine_queries_management do

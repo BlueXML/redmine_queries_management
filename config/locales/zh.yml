@@ -1,0 +1,8 @@
+en:
+  error_name_flag: "输入无效名称"
+  save_button: "保存"
+  cancel_button: "取消"
+  title_placeholder: "名称"
+  add_wrapper_link: "添加查询类别"
+  permission_manage_public_query_wrappers: "管理公共查询类别"
+  confirmation: "确定？"
