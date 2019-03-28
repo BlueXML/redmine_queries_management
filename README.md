@@ -14,6 +14,7 @@ This plugin provides the following features :
 Languages availables :
 * EN
 * FR
+* ZH
 
 ## Use :
 

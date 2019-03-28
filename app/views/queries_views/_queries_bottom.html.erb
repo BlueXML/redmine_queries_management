@@ -35,5 +35,7 @@
 <script type="text/javascript">
     $('.div_wrap_true').append($('#add_public_query_wrapper'));
     $('.div_wrap_false').append($('#add_private_query_wrapper'));
+    $("#sidebar > ul.queries_manage > li:first >a:first").click();
+    $(".query.selected").closest("ul").prev().prev().children("a:first").click()
 </script>
 
